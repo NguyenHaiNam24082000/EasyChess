@@ -339,6 +339,7 @@ function ChessBoard(props) {
   // doComputerMove function will only change when chessBoard changes
   // this will ensure that the debounce function will work
   //Todo: bot ai alpha-beta prunning
+  // eslint-disable-next-line
   const doComputerMove = useCallback(
     // debounce(
     //   () => {
