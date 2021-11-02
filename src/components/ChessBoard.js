@@ -19,7 +19,7 @@ import { useHistory } from "react-router-dom";
 
 import some from "lodash/some";
 import capitalize from "lodash/capitalize";
-import random from "lodash/random";
+// import random from "lodash/random";
 import debounce from "lodash/debounce";
 
 import { AnimateSharedLayout } from "framer-motion";
@@ -153,17 +153,25 @@ const getPieceValue = (piece, x, y) => {
   const getAbsoluteValue = (piece, isWhite, x, y) => {
     // console.log("aaa",isWhite);
     if (piece.name === PIECES.PAWN) {
-      return weights["p"] + (isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x]);
+      return (
+        weights["p"] + (isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x])
+      );
     } else if (piece.name === PIECES.ROOK) {
-      return weights["r"] + (isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x]);
+      return (
+        weights["r"] + (isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x])
+      );
     } else if (piece.name === PIECES.BISHOP) {
-      return weights["b"] + (isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x]);
+      return (
+        weights["b"] + (isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x])
+      );
     } else if (piece.name === PIECES.KNIGHT) {
       return weights["n"] + knightEval[y][x];
     } else if (piece.name === PIECES.QUEEN) {
       return weights["q"] + evalQueen[y][x];
     } else if (piece.name === PIECES.KING) {
-      return weights["k"] + (isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x]);
+      return (
+        weights["k"] + (isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x])
+      );
     }
   };
   const absoluteValue = getAbsoluteValue(
@@ -172,7 +180,7 @@ const getPieceValue = (piece, x, y) => {
     x,
     y
   );
-  console.log("abababa",absoluteValue);
+  console.log("abababa", absoluteValue);
   return piece.color === COLORS.WHITE ? absoluteValue : -absoluteValue;
 };
 
@@ -188,7 +196,6 @@ const evaluateBoard = (board) => {
 };
 
 const minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
-  debugger;
   if (depth === 0) {
     return -evaluateBoard(game.chessBoard);
   }
@@ -202,7 +209,10 @@ const minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
       const { position, move } = newGameMoves[i];
       const nextChessBoard = {
         chessBoard: getNextChessBoard(position, move, game.chessBoard),
-        allMoves: getAllMoves(COLORS.BLACK,getNextChessBoard(position, move, game.chessBoard)),
+        allMoves: getAllMoves(
+          COLORS.BLACK,
+          getNextChessBoard(position, move, game.chessBoard)
+        ),
       };
       bestMove = Math.max(
         bestMove,
@@ -220,7 +230,10 @@ const minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
       const { position, move } = newGameMoves[j];
       const nextChessBoard = {
         chessBoard: getNextChessBoard(position, move, game.chessBoard),
-        allMoves: getAllMoves(COLORS.BLACK,getNextChessBoard(position, move, game.chessBoard)),
+        allMoves: getAllMoves(
+          COLORS.BLACK,
+          getNextChessBoard(position, move, game.chessBoard)
+        ),
       };
       bestMove = Math.min(
         bestMove,
@@ -233,11 +246,9 @@ const minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
     }
     return bestMove;
   }
-  debugger;
 };
 
 const minimaxRoot = function (depth, game, isMaximisingPlayer) {
-  debugger;
   var newGameMoves = game.allMoves;
   var bestMove = -9999;
   var bestMoveFound;
@@ -251,7 +262,10 @@ const minimaxRoot = function (depth, game, isMaximisingPlayer) {
     const { position, move } = newGameMove;
     const nextChessBoard = {
       chessBoard: getNextChessBoard(position, move, game.chessBoard),
-      allMoves: getAllMoves(COLORS.BLACK,getNextChessBoard(position, move, game.chessBoard)),
+      allMoves: getAllMoves(
+        COLORS.BLACK,
+        getNextChessBoard(position, move, game.chessBoard)
+      ),
     };
     // console.log(nextChessBoard);
     var value = minimax(
@@ -266,7 +280,6 @@ const minimaxRoot = function (depth, game, isMaximisingPlayer) {
       bestMoveFound = newGameMove;
     }
   }
-  debugger;
   return bestMoveFound;
 };
 
@@ -347,16 +360,15 @@ function ChessBoard(props) {
     //   },
     //   chessBoardType === CHESSBOARD_TYPE.AUTOPLAY ? 3000 : 1000
     // ),
-
     debounce(
       () => {
         const allMoves = getAllMoves(playerColor, chessBoard);
         console.log(allMoves);
-        const { position, move } = getBestMove(3, { chessBoard, allMoves });
+        const { position, move } = getBestMove(2, { chessBoard, allMoves });
         const nextChessBoard = getNextChessBoard(position, move, chessBoard);
         setChessBoard(nextChessBoard);
       },
-      chessBoardType === CHESSBOARD_TYPE.AUTOPLAY ? 1000 : 1000
+      chessBoardType === CHESSBOARD_TYPE.AUTOPLAY ? 2000 : 1000
     ),
     [chessBoard]
   );
